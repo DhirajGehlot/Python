@@ -1,0 +1,52 @@
+# Import OpenCV
+
+import numpy as np
+import cv2
+
+''' Function red_threshold() accept three parameters
+1: img: Original image
+2: hsv_low : Lower hsv range
+3: hsv_high: Higher hsv range
+
+This function return red part of image
+and also display image with threshold range from  hsv_low to hsv_high'''
+
+def red_threshold(img, hsv_low, hsv_high):
+
+    hsv_l= hsv_low                               # Copy hsv_low to hsv_l
+    hsv_h= hsv_high                              # Copy hsv_high to hsv_h
+    
+    param1 = [0,150,150]                         # Lower threshold for red
+    param2 = [ 3,255,255]                        # Upper threshold for red
+    
+    hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)    # Convert RGB image to HSV
+
+    lowerl = np.array(hsv_l)                     # Convert the parameters into a form that OpenCV can understand
+    upperh = np.array(hsv_h)
+
+    mask1  = cv2.inRange(hsv, lowerl, upperh)    # Mask for image with 
+    res1   = cv2.bitwise_and(img, img, mask= mask1)
+    cv2.imshow('image1',res1) 
+    
+    lower = np.array(param1)                     # Convert the parameters into a form that OpenCV can understand
+    upper = np.array(param2)
+    
+    mask  = cv2.inRange(hsv, lower, upper)
+    res   = cv2.bitwise_and(img, img, mask= mask)
+    return(res)
+
+
+img=cv2.imread('test_images/1.jpg')             # Read image 1.jpg
+
+hsv_lower=[10,210,210]
+hsv_higher=[50,255,255]
+
+redimage=red_threshold(img,hsv_lower,hsv_higher)# Call function with three parameters
+
+cv2.imshow('image',img)                         # Display Original image
+cv2.imshow('redimage',redimage)                 # Display Red image
+
+cv2.waitKey(0)                                  # wait for key press for program to close
+cv2.destroyAllWindows()
+
+
