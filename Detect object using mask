@@ -1,0 +1,33 @@
+
+## Import OpenCV
+import numpy as np
+import cv2
+# Initialize camera
+cap = cv2.VideoCapture(1)
+
+param1 = [0,0,0]
+param2 = [ 350,55,100]
+
+
+while(1):
+    
+    ## Read the image
+    ret, frame = cap.read()
+    hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+    ## Do the processing
+    lower = np.array(param1)    ## Convert the parameters into a form that OpenCV can understand
+    upper = np.array(param2)
+    mask  = cv2.inRange(hsv, lower, upper)
+    res   = cv2.bitwise_and(frame, frame, mask= mask)
+    ## Show the image
+    cv2.imshow('image',frame)
+    cv2.imshow('mask',mask)
+    cv2.imshow('res',res)
+    
+
+    ## End the video loop
+    if cv2.waitKey(1) == 27:  ## 27 - ASCII for escape key
+        break
+
+cap.release()
+cv2.destroyAllWindows()
